@@ -9,7 +9,7 @@ public class StartingListener extends ListenerAdapter {
         MessageChannel channel = event.getJDA().getTextChannelById("745634050672296040");
 //        channel.sendMessage("I'm online master").queue();
 
-//        new Reminder().remindSleep(channel);
+        new Reminder().remindSleep(channel);
         new Reminder().remindDrink(channel);
     }
 }

@@ -30,11 +30,6 @@ public class MyListener extends ListenerAdapter {
 
         // Checks if first string inputted is equivalent to any of the command below.
         switch(content[0]) {
-            case "!shut down":
-
-            case "!delete":
-                event.getChannel().sendMessage("Hello").queue();
-                break;
             case "!greet":
                 greetMembers(event);
                 break;
@@ -48,6 +43,7 @@ public class MyListener extends ListenerAdapter {
                 addToExpose(event, content);
                 break;
             case "!play":
+                // Used for playing music but currently on work.
                 Guild guild = event.getGuild();
                 VoiceChannel myChannel = guild.getVoiceChannelById("780802973609099307");
                 AudioManager audioManager = guild.getAudioManager();
