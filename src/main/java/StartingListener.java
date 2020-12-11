@@ -57,6 +57,6 @@ public class StartingListener extends ListenerAdapter {
 
         final ScheduledFuture<?> drink =
                 scheduler.scheduleWithFixedDelay(reminder,
-                        15, 15, MINUTES);
+                        0, 15, MINUTES);
     }
 }

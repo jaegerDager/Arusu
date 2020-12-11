@@ -250,9 +250,10 @@ public class MyListener extends ListenerAdapter {
             return;
         }
 
+        // Records user's subscription by their Id and subscription type
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("res/FileData/Subscribers.csv", true))) {
             String memberId = event.getMember().getId();
-            String tuple = memberId + ", " + content[1] + '\n';
+            String tuple = memberId + "," + content[1] + '\n';
             writer.write(tuple);
             drinkHandler(event, memberId);
         } catch (IOException e) {
@@ -274,6 +275,6 @@ public class MyListener extends ListenerAdapter {
 
         final ScheduledFuture<?> drink =
                 scheduler.scheduleWithFixedDelay(reminder,
-                        15, 15, MINUTES);
+                        0, 15, MINUTES);
     }
 }
