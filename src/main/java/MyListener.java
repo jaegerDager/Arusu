@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -18,6 +19,8 @@ import java.awt.*;
 import java.io.*;
 import java.nio.Buffer;
 import java.time.OffsetTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -35,7 +38,6 @@ public class MyListener extends ListenerAdapter {
         super.onGuildMessageReceived(event);
         // Checks if the event is triggered by a bot.
         if (event.getAuthor().isBot()) return;
-
 
         // Take the message sent by user and convert it to arrays of integers.
         Message message = event.getMessage();
@@ -112,8 +114,8 @@ public class MyListener extends ListenerAdapter {
                 break;
         }
 
-        if(event.getMessage().getMentionedMembers().contains(event.getGuild().getMemberById("326762999882842113"))) {
-            event.getChannel().sendMessage("I've told you not to ping master when he's busy. Do you want to get ban?").queue();
+        if(!message.getMentionedMembers().isEmpty()) {
+            replyForMentioned(event);
         }
     }
 
@@ -344,15 +346,45 @@ public class MyListener extends ListenerAdapter {
     private void showAffection(GuildMessageReceivedEvent event) {
         int rng = (int) (Math.random() * 100);
 
-        if(event.getAuthor().getId().equals("326762999882842113")) {
+        if(event.getAuthor().getId().equals(Main.botOwnerId)) {
             event.getChannel().sendMessage("You don't have to ask master my affection for you is always 100%").queue();
             return;
+        } else if(event.getAuthor().getId().equals(Main.guildOwnerId)) {
+            event.getChannel().sendMessage("Master's boss obviously gets 1000% of the love.").queue();
         }
 
         if(rng < 50) {
-            event.getChannel().sendMessage("Affection: " + rng + "%. Maybe a worm will love you more?").queue();
+            event.getChannel()
+                    .sendMessage("Affection: " + rng + "%. Maybe a worm will love you more?")
+                    .queue();
         } else {
-            event.getChannel().sendMessage("Affection: " + rng + "%. Here's some love for you! :kissing_heart:").queue();
+            event.getChannel()
+                    .sendMessage("Affection: " + rng + "%. Here's some love for you! :kissing_heart:")
+                    .queue();
+        }
+    }
+
+    private void replyForMentioned(GuildMessageReceivedEvent event) {
+        // Sends message when bot owner gets mentioned by a member's message
+        List<Member> mentionedMembers = event.getMessage().getMentionedMembers();
+        Member botOwner = event.getGuild().getMemberById(Main.botOwnerId);
+        Member bot = event.getGuild().getMemberById("780800869875974185");
+
+        if(mentionedMembers.contains(botOwner)) {
+            if (event.getMember().equals(botOwner)) {
+                event.getChannel()
+                        .sendMessage("What are you trying to do master? :KannaWhat:")
+                        .queue();
+            } else if (!botOwner.getOnlineStatus().equals(OnlineStatus.ONLINE)
+                    || !botOwner.getActivities().equals(Activity.ActivityType.DEFAULT)) {
+                event.getChannel()
+                        .sendMessage("I've told you not to ping master when he's busy. Do you want to get ban?")
+                        .queue();
+            }
+        } else if(mentionedMembers.contains(bot)) {
+            event.getChannel()
+                    .sendMessage("Do you require me to do anything Mr. " + event.getAuthor().getName() + "?")
+                    .queue();
         }
     }
 }
