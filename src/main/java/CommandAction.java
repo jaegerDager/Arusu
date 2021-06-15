@@ -605,7 +605,7 @@ public class CommandAction {
 
         HttpResponse<String> response = Unirest.get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1" +
                                                     "&q=" + videoName +
-                                                    "&key=AIzaSyBJBYVVg0s3coI-xCOFBDZXA3hTCKGbOkw")
+                                                    "&key=" + System.getenv("GOOGLE_API_KEY"))
                                                 .header("Content-type","application/json")
                                                 .asString();
 
